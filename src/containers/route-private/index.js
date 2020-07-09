@@ -1,9 +1,8 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, Route } from 'react-router-dom';
+import Loader from '@components/elements/loader';
 import useSelectorMap from '@utils/hooks/use-selector-map';
-import useInit from '@utils/hooks/use-init';
-import session from '@store/session/actions';
 
 function RoutePrivate(props) {
   const { component: Component, ...routeProps } = props;
@@ -12,18 +11,10 @@ function RoutePrivate(props) {
     session: state.session,
   }));
 
-  useInit(async () => {
-    await session.remind();
-  });
-
   routeProps.render = useCallback(
     props => {
       if (select.session.wait) {
-        return (
-          <div>
-            <i>Check session...</i>
-          </div>
-        );
+        return <Loader />;
       } else if (select.session.exists) {
         return <Component {...props} />;
       } else {

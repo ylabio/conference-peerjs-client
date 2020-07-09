@@ -33,7 +33,6 @@ const actions = {
       await actions.save({ token, wait: true, exists: false });
       try {
         const response = await api.users.current({});
-
         await actions.save({ token, user: response.data.result, wait: false, exists: true });
       } catch (e) {
         await actions.clear(false);

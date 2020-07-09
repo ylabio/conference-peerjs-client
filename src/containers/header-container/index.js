@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import detectActive from '@utils/detect-active';
+import sessionActions from '@store/session/actions';
 
 import { Layout, Menu } from 'antd';
 const { Header } = Layout;
@@ -11,6 +12,7 @@ import Logo from '@components/elements/logo';
 
 class HeaderContainer extends Component {
   static propTypes = {
+    session: PropTypes.object,
     dispatch: PropTypes.func.isRequired,
     location: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
@@ -24,6 +26,7 @@ class HeaderContainer extends Component {
         [
           { title: 'Home', to: '/', active: false },
           { title: 'About', to: '/about', active: false },
+          // { title: 'Login', to: '/login', active: false },
         ],
         props.location,
       ),
@@ -42,7 +45,7 @@ class HeaderContainer extends Component {
   }
 
   render() {
-    const { history, location } = this.props;
+    const { history, location, session } = this.props;
     const { items } = this.state;
 
     return (
@@ -59,6 +62,19 @@ class HeaderContainer extends Component {
               {item.title}
             </Menu.Item>
           ))}
+          {!session.exists && (
+            <Menu.Item key={'/login'} onClick={() => history.push('/login')}>
+              Login
+            </Menu.Item>
+          )}
+          {session.exists && [
+            <Menu.Item key={'/rooms'} onClick={() => history.push('/rooms')}>
+              Rooms
+            </Menu.Item>,
+            <Menu.Item key={'/logout'} onClick={() => sessionActions.clear()}>
+              Logout
+            </Menu.Item>,
+          ]}
         </Menu>
       </Header>
     );
@@ -67,5 +83,7 @@ class HeaderContainer extends Component {
 
 export default compose(
   withRouter,
-  connect(state => ({})),
+  connect(state => ({
+    session: state.session,
+  })),
 )(HeaderContainer);

@@ -74,8 +74,12 @@ const history = {
     }
   },
 
+  goLogin: (push = true) => {
+    push ? history.push('/login') : history.replace('/login');
+  },
+
   goPrivate: (push = true) => {
-    push ? history.push('/private') : history.replace('/private');
+    push ? history.push('/rooms') : history.replace('/rooms');
   },
 };
 

@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 import './style.less';
 
 class Logo extends Component {
   static propTypes = {
     title: PropTypes.string,
+    history: PropTypes.object,
   };
 
   static defaultProps = {
@@ -13,10 +15,14 @@ class Logo extends Component {
   };
 
   render() {
-    const { title } = this.props;
+    const { title, history } = this.props;
 
-    return <div className="logo">{title}</div>;
+    return (
+      <div className="logo" onClick={() => history.push('/')}>
+        {title}
+      </div>
+    );
   }
 }
 
-export default Logo;
+export default withRouter(Logo);

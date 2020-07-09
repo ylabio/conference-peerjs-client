@@ -10,7 +10,7 @@ function About() {
       <Header />
       <Content>
         <h1>ABOUT</h1>
-        <p>PeerJS example application with React & Redux.</p>
+        <p>Conference PeerJS client-application.</p>
         <p>
           PeerJS wraps the browser's WebRTC implementation to provide a complete, configurable, and
           easy-to-use peer-to-peer connection API. Equipped with nothing but an ID, a peer can

@@ -1,7 +1,12 @@
 import React, { Fragment, useCallback } from 'react';
-import LayoutPage from '@components/layouts/layout-page';
-import HeaderContainer from '@containers/header-container';
-import LayoutContent from '@components/layouts/layout-content';
+import { Layout } from 'antd';
+import Header from '@containers/header-container';
+import PeerJsConnect from '@containers/peerjs-connect';
+import PeersConnect from '@containers/peers-connect';
+import MyVideo from '@containers/my-video';
+import Content from '@components/layouts/layout-content';
+import Conference from '@containers/conference';
+import Footer from '@components/layouts/layout-footer';
 import FormLogin from '@components/forms/form-login';
 import useSelectorMap from '@utils/hooks/use-selector-map';
 import formLogin from '@store/form-login/actions';
@@ -13,15 +18,25 @@ function Login(props) {
   }));
 
   const callbacks = {
-    onChangeForm: useCallback(async data => {
-      await formLogin.change(data);
-    }, []),
     onSubmitForm: useCallback(async data => {
       await formLogin.submit(data);
-      // @todo перейти на страницу, с которой был редирект или по умочланию в приватный раздел
       history.goPrivate();
     }, []),
   };
+
+  return (
+    <Layout className="layout">
+      <Header />
+      <Content>
+        <FormLogin
+          wait={select.formLogin.wait}
+          errors={select.formLogin.errors}
+          onSubmit={callbacks.onSubmitForm}
+        />
+      </Content>
+      <Footer />
+    </Layout>
+  );
 
   return (
     <LayoutPage header={<HeaderContainer />}>

@@ -11,7 +11,7 @@ let config = {
 
     proxy: {
       '/api/**': {
-        target: 'http://example.com',
+        target: 'http://localhost:8160',
         secure: true,
         changeOrigin: true,
       },
