@@ -11,6 +11,7 @@ import Main from '@app/main';
 import About from '@app/about';
 import Login from '@app/login';
 import Rooms from '@app/rooms';
+import Conference from '@app/conference';
 import NotFound from '@app/not-found';
 
 import 'antd/dist/antd.css';
@@ -40,6 +41,7 @@ function App() {
         <Route path="/about" component={About} />
         <Route path="/login" component={Login} />
         <RoutePrivate path="/rooms" failpath="/login" exact={true} component={Rooms} />
+        <RoutePrivate path="/rooms/:id" failpath="/login" exact={true} component={Conference} />
         <Route component={NotFound} />
       </Switch>
       <Modals />

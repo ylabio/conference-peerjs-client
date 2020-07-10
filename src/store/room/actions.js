@@ -38,8 +38,8 @@ const actions = {
     try {
       const response = await api.rooms.getOne({ id });
       const current = response.data.result;
-      store.dispatch({ type: types.SET, payload: { current } });
-      return result;
+      store.dispatch({ type: types.SET, payload: { wait: false, current } });
+      return current;
     } catch (e) {
       if (e.response && e.response.data && e.response.data.error) {
         store.dispatch({

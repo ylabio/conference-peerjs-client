@@ -18,7 +18,7 @@ function RoutePrivate(props) {
       } else if (select.session.exists) {
         return <Component {...props} />;
       } else {
-        return <Redirect to={{ pathname: routeProps.failPath, state: { from: props.location } }} />;
+        return <Redirect to={{ pathname: routeProps.failpath, state: { from: props.location } }} />;
       }
     },
     [select, Component],
@@ -29,11 +29,11 @@ function RoutePrivate(props) {
 
 RoutePrivate.propTypes = {
   component: PropTypes.any.isRequired,
-  failPath: PropTypes.string,
+  failpath: PropTypes.string,
 };
 
 RoutePrivate.defaultProps = {
-  failPath: '/login',
+  failpath: '/login',
 };
 
 export default React.memo(RoutePrivate);
