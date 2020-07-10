@@ -14,12 +14,12 @@ export const initState = {
 };
 
 const actions = {
-  fetchList: async ({ search = null } = {}) => {
+  fetchAll: async ({ search = null } = {}) => {
     store.dispatch({ type: types.SET, payload: { wait: true, errors: null } });
     try {
       const response = await api.rooms.getList({ search, limit: 100 });
       const result = response.data.result;
-      store.dispatch({ type: types.SET, payload: result });
+      store.dispatch({ type: types.SET, payload: { wait: false, ...result } });
       return result;
     } catch (e) {
       if (e.response && e.response.data && e.response.data.error) {

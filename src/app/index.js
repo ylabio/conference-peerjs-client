@@ -39,7 +39,7 @@ function App() {
         <Route path="/" exact={true} component={Main} />
         <Route path="/about" component={About} />
         <Route path="/login" component={Login} />
-        <RoutePrivate path="/rooms" failpath="/login" component={Rooms} />
+        <RoutePrivate path="/rooms" failpath="/login" exact={true} component={Rooms} />
         <Route component={NotFound} />
       </Switch>
       <Modals />
