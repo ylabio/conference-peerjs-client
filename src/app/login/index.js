@@ -1,11 +1,7 @@
 import React, { Fragment, useCallback } from 'react';
 import { Layout } from 'antd';
 import Header from '@containers/header-container';
-import PeerJsConnect from '@containers/peerjs-connect';
-import PeersConnect from '@containers/peers-connect';
-import MyVideo from '@containers/my-video';
 import Content from '@components/layouts/layout-content';
-import Conference from '@containers/conference';
 import Footer from '@components/layouts/layout-footer';
 import FormLogin from '@components/forms/form-login';
 import useSelectorMap from '@utils/hooks/use-selector-map';

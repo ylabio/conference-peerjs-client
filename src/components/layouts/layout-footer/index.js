@@ -7,7 +7,7 @@ class LayoutFooter extends Component {
   render() {
     return (
       <Footer style={{ textAlign: 'center' }}>
-        PeerJS & React & Redux ©2020 Created by{' '}
+        YLab Conference ©2020 Created by{' '}
         <a href="https://github.com/proteye" target="_blank">
           @proteye
         </a>

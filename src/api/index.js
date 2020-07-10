@@ -35,3 +35,4 @@ import Users from '@api/users';
 
 export const users = new Users(http);
 export const rooms = new Common(http, 'rooms');
+export const peers = new Common(http, 'peers');

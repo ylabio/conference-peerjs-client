@@ -10,7 +10,7 @@ class PeerJs {
     this.error = null;
     this.mediaConfig = {
       audio: true,
-      video: true,
+      video: false,
     };
     this.displayMediaConfig = {
       video: {
@@ -21,12 +21,14 @@ class PeerJs {
   }
 
   // Соединение с PeerJs сервером и подписываение на события
-  connect(peerId = null, callback) {
+  connect({ peerId = null, mediaConfig = this.mediaConfig, callback }) {
     // If connected then do nothing
     if (this.isConnected()) {
       callback && callback(this.peerId);
       return;
     }
+
+    this.mediaConfig = mediaConfig;
 
     if (!this.userMedia) {
       // Запрашиваем доступ к микрофону и видео камере
@@ -54,7 +56,7 @@ class PeerJs {
 
     // Событие при установке соединения с сервером PeerJs
     this.peer.on('open', id => {
-      // console.log('peer opened:', id);
+      console.log('peer opened:', id, callback);
       this.peerId = id;
       this.error = null;
       callback && callback(this.peerId);
@@ -81,7 +83,7 @@ class PeerJs {
       // reconnect infinitely every 1 sec.
       setTimeout(() => {
         // реконнектим со старым peerId
-        this.connect(this.peerId, callback);
+        this.connect({ peerId: this.peerId, mediaConfig, callback });
       }, 2000);
     });
 
@@ -163,20 +165,6 @@ class PeerJs {
     }
 
     try {
-      // const root = document.getElementById('my_video');
-      // const tag = 'video';
-      // const elm = document.createElement(tag);
-      // const elmRoot = document.createElement('div');
-      // elmRoot.className = 'my-video__video';
-      // const elmLabel = document.createElement('div');
-      // elmLabel.className = 'my-video__label';
-      // elmLabel.innerText = 'My Share Screen';
-      // elmRoot.append(elm);
-      // elmRoot.append(elmLabel);
-      // root.append(elmRoot);
-      // elm.srcObject = stream;
-      // elm.play();
-
       let displayStream;
       if (navigator.mediaDevices.getDisplayMedia) {
         displayStream = await navigator.mediaDevices.getDisplayMedia(this.displayMediaConfig);
@@ -298,7 +286,7 @@ class PeerJs {
     }
 
     const root = document.getElementById('peers_video');
-    const tag = !this.mediaConfig.video ? 'audio' : 'video';
+    const tag = 'video';
     const elm = document.createElement(tag);
     const elmRoot = document.createElement('div');
     elmRoot.className = 'conference__video';
@@ -328,7 +316,7 @@ class PeerJs {
       return;
     }
     const root = document.getElementById('my_video');
-    const tag = !this.mediaConfig.video ? 'audio' : 'video';
+    const tag = 'video';
     const elm = document.createElement(tag);
     const elmRoot = document.createElement('div');
     elmRoot.className = 'my-video__video';

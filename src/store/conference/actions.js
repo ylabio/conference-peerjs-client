@@ -1,7 +1,8 @@
 import moment from 'moment';
+import { differenceBy } from 'lodash';
 import store from '@store';
 import peerJs from '@utils/peer-js';
-import { differenceBy } from 'lodash';
+import peerActions from '@store/peer/actions';
 
 export const types = {
   SET: Symbol('SET'),
@@ -13,27 +14,45 @@ export const initState = {
   peerId: null,
   nickname: '',
   connected: false,
+  mediaConfig: {
+    audio: true,
+    video: false,
+  },
   wait: false,
   errors: null,
 };
 
+function getNicknameFromUser(user) {
+  return user && user.profile
+    ? `${user.profile.name} ${user.profile.surname}`.trim()
+    : user.username || user.email;
+}
+
 const actions = {
-  connect: async ({ nickname, peerId = null, peerIds = [] }) => {
+  connect: async ({ peerId = null, roomPeers = [] }) => {
+    console.log('roomPeers', roomPeers);
     store.dispatch({ type: types.SET, payload: { wait: true, errors: null } });
     try {
-      const peers = peerIds.map(peerId => ({
-        id: peerId,
-        nickname: 'Unknown',
+      const { session, conference } = store.getState();
+      const nickname = getNicknameFromUser(session.user);
+      const peers = roomPeers.map(peer => ({
+        id: peer.peerId,
+        nickname: getNicknameFromUser(peer.user),
         conn: null,
         call: null,
       }));
-      peerJs.connect(peerId || null, peerId => {
-        store.dispatch({
-          type: types.SET,
-          payload: { wait: false, connected: true, peerId, nickname, peers: peers || [] },
-        });
-        actions.connectDataWithAll();
-        actions.connectMediaWithAll();
+      peerJs.connect({
+        peerId,
+        mediaConfig: conference.mediaConfig,
+        callback: myPeerId => {
+          store.dispatch({
+            type: types.SET,
+            payload: { wait: false, connected: true, peerId: myPeerId, nickname, peers },
+          });
+          peerActions.connect(myPeerId);
+          actions.connectDataWithAll();
+          actions.connectMediaWithAll();
+        },
       });
     } catch (e) {
       store.dispatch({
@@ -293,6 +312,10 @@ const actions = {
       peers = [...state.peers, { id: call.peer, nickname, shareCall: call }];
     }
     store.dispatch({ type: types.SET, payload: { peers } });
+  },
+
+  mediaConfigChange: async mediaConfig => {
+    store.dispatch({ type: types.SET, payload: { mediaConfig } });
   },
 };
 
